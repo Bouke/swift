@@ -771,6 +771,9 @@ llvm::Constant *IRGenModule::getAddrOfStringForTypeRef(StringRef Str) {
 
 llvm::Constant *IRGenModule::getAddrOfCaptureDescriptor(SILFunction &SILFn,
                                                         HeapLayout &Layout) {
+  if (!IRGen.Opts.EnableReflectionMetadata)
+    return llvm::Constant::getNullValue(CaptureDescriptorPtrTy);
+
   llvm::SetVector<CanType> BuiltinTypes;
   CaptureDescriptorBuilder builder(*this, BuiltinTypes, SILFn, Layout);
 
